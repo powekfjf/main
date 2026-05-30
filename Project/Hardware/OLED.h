@@ -14,6 +14,8 @@ void OLED_Show_Num(uint8_t y,uint8_t x,uint32_t num,uint8_t len);
 void OLED_Show_Chinese(uint8_t y,uint8_t x,uint8_t *ch,uint8_t len);
 void OLDE_Show_HexNum(uint8_t y,uint8_t x,uint32_t num,uint8_t len);
 void OLED_ClearCoordinates(uint8_t y,uint8_t x,Direction_e Direction);
+void OLED_Show_SignedNum(uint8_t y,uint8_t x,int32_t num,uint8_t len);
+void OLED_Show_FloatNum(uint8_t y,uint8_t x,float num,uint8_t tennum,uint8_t Decimalnum);
 
 
 void OLED_Scroll_Left_ENABLE(void);

@@ -1,5 +1,6 @@
 #include "OLED_includeall.h"
 #include "OLED_Font.h"
+#include <math.h>
 /**
   * @brief  硬件层I2C连续写命令和数据函数        
   * @note          
@@ -128,7 +129,7 @@ void OLED_ClearCoordinates(uint8_t y,uint8_t x,Direction_e Direction)
   * @param  y指数
   * @retval x的y次方
 **/
-uint32_t xPowy(uint8_t x,uint8_t y)
+uint64_t xPowy(uint8_t x,uint8_t y)
 {
     if(y==0) return 1;
     uint32_t rset;
@@ -192,10 +193,9 @@ void OLED_Show_String(uint8_t y,uint8_t x,char *chr)
 void OLED_Show_Num(uint8_t y,uint8_t x,uint32_t num,uint8_t len)
 {
     if(len>10) len=10;
-    for(uint64_t rest=10;len>0;len--)
+    for(uint64_t rest=10;len>0;len--,rest*=10)
     {
         OLED_ShowChar(y,x+(len-1),((num%rest)/(rest/10))+'0');
-        rest*=10;
     }
 }
 
@@ -218,6 +218,41 @@ void OLDE_Show_HexNum(uint8_t y,uint8_t x,uint32_t num,uint8_t len)
         num>>=4;
         if(i<10) OLED_Show_Num(y,x+1+len,i,1);
         else OLED_ShowChar(y,x+1+len,i+'A'-10);
+    }
+}
+
+
+void OLED_Show_SignedNum(uint8_t y,uint8_t x,int32_t num,uint8_t len)
+{
+    if(num<0)
+    {
+        OLED_ShowChar(y,x,'-');
+        OLED_Show_Num(y,x+1,-num,len);
+    }
+    else
+    {
+        OLED_Show_Num(y,x,num,len);
+    }
+}
+
+void OLED_Show_FloatNum(uint8_t y,uint8_t x,float num,uint8_t tennum,uint8_t Decimalnum)
+{
+    if(Decimalnum==0) OLED_Show_SignedNum(y,x,(int32_t)num,tennum);
+    else
+    {
+        int64_t Index=xPowy(10,Decimalnum);
+        OLED_Show_SignedNum(y,x,(int32_t)num,tennum);
+        uint32_t intNum=(fabsf(num)-(uint32_t)fabsf(num))*Index;
+        if(num<0)
+        {
+            OLED_ShowChar(y,x+tennum+1,'.');
+            OLED_Show_Num(y,x+tennum+2,intNum,Decimalnum);
+        }
+        else
+        {
+            OLED_ShowChar(y,x+tennum,'.');
+            OLED_Show_Num(y,x+tennum+1,intNum,Decimalnum);
+        }
     }
 }
 
@@ -257,7 +292,6 @@ void OLED_Init(void)
         OLED_CMD_DISPLAY_ON//开启显示
     };
     HAL_Delay(1);
-    MX_DMA_Init();
     MX_I2C1_Init();
     HAL_Delay(1);
     OLED_I2C_Continuous_Write_CommandAndDat(OLED_Init_t,sizeof(OLED_Init_t));

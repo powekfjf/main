@@ -10,14 +10,14 @@ void OLED_Show_Love16x16(uint8_t y,uint8_t x)
     uint8_t buff_temp[17]={OLED_Continuous_Write_Data};
     for(i=1;i<16;i++)
     {
-        buff_temp[i]=OLED_Lmagh16x16[0][i];
+        buff_temp[i]=OLED_Lmagh16x16[i];
     }
     OLED_Set_Display_Coordinates((y-1)*2,(x-1)*16);
     OLED_I2C_Continuous_Write_CommandAndDat(buff_temp,sizeof(buff_temp));
     
     for(i=1;i<16;i++)
     {
-        buff_temp[i]=OLED_Lmagh16x16[0][i+16];
+        buff_temp[i]=OLED_Lmagh16x16[i+16];
     }
     OLED_Set_Display_Coordinates((y-1)*2+1,(x-1)*16);
     OLED_I2C_Continuous_Write_CommandAndDat(buff_temp,sizeof(buff_temp));
@@ -30,25 +30,29 @@ void OLED_Show_Love32x32(uint8_t y,uint8_t x)
     OLED_Set_Display_Coordinates((y-1)*2,(x-1)*32);
     for(i=1;i<32;i++)
     {
-        buff[i]=OLED_Lmagh32x32[0][i];
+        buff[i]=OLED_Lmagh32x32[i];
     }
     OLED_I2C_Continuous_Write_CommandAndDat(buff,sizeof(buff));
     OLED_Set_Display_Coordinates((y-1)*2+1,(x-1)*32);
     for(i=1;i<32;i++)
     {
-        buff[i]=OLED_Lmagh32x32[0][i+32];
+        buff[i]=OLED_Lmagh32x32[i+32];
     }
     OLED_I2C_Continuous_Write_CommandAndDat(buff,sizeof(buff));
     OLED_Set_Display_Coordinates((y-1)*2+2,(x-1)*32);
     for(i=1;i<32;i++)
     {
-        buff[i]=OLED_Lmagh32x32[0][i+64];
+        buff[i]=OLED_Lmagh32x32[i+64];
     }
     OLED_I2C_Continuous_Write_CommandAndDat(buff,sizeof(buff));
     OLED_Set_Display_Coordinates((y-1)*2+3,(x-1)*32);
     for(i=1;i<32;i++)
     {
-        buff[i]=OLED_Lmagh32x32[0][i+96];
+        buff[i]=OLED_Lmagh32x32[i+96];
     }
     OLED_I2C_Continuous_Write_CommandAndDat(buff,sizeof(buff));
+}
+
+void OLED_Show_Car32x16(uint8_t y,uint8_t x)
+{
 }

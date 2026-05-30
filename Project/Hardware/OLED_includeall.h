@@ -3,8 +3,6 @@
 
 #include "main.h"
 #include "i2c.h"
-#include "dma.h"
-#include "usart.h"
 #include "OLED_Define.h"
 #include "string.h"
 
